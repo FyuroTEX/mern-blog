@@ -31,12 +31,36 @@ router.post('/register',
             res.status(201).json({ message: 'User create' });
 
         } catch (e) {
-            res.status(500).json({ message: 'Что-то пошло не такб попробуйте снова' });
+            res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
         }
     });
 //api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login',
+    [
+        check('email', 'Enter correct email').normalizeEmail().isEmail(),
+        check('passowrd', 'Enter password').exists()
+    ],
+    async (req, res) => {
+        try {
+            const errors = validationResult(req);
 
-});
+            if (!errors.isEmpty()) {
+                return res.status(400).json({
+                    errors: errors.array(),
+                    message: 'Invalid login data'
+                })
+            }
+            const { email, password } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) {
+                return res.status(400).json({
+                    message: 'User not found'
+                })
+            }
+
+        } catch (e) {
+            res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
+        }
+    });
 
 module.exports = router;
