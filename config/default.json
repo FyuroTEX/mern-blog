@@ -1,4 +1,5 @@
 {
     "port": 5000,
+    "jwtSecret": "react mern",
     "mongoUri": "mongodb+srv://yurii:erdfcv@cluster0-ohfv6.azure.mongodb.net/<dbname>?retryWrites=true&w=majority"
 }

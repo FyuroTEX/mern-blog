@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const User = require('../models/User');
 const router = Router();
 const { check, validationResult } = require('express-validator');
@@ -48,19 +50,36 @@ router.post('/login',
                 return res.status(400).json({
                     errors: errors.array(),
                     message: 'Invalid login data'
-                })
-            }
+                });
+            };
             const { email, password } = req.body;
             const user = await User.findOne({ email });
             if (!user) {
                 return res.status(400).json({
                     message: 'User not found'
-                })
-            }
+                });
+            };
+            const isMatch = await bcrypt.compare(password, user.password);
+            if (!isMatch) {
+                return res.status(400).json({
+                    message: 'Wrong password, try again'
+                });
+            };
+
+            const token = jwt.sign(
+                { userId: user.id },
+                config.get('jwtSecret'),
+                { expiresIn: '1h' }
+            );
+
+            res.json({
+                token,
+                userId: user.id
+            });
 
         } catch (e) {
             res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
-        }
+        };
     });
 
 module.exports = router;
