@@ -6,12 +6,13 @@ const User = require('../models/User');
 const router = Router();
 const { check, validationResult } = require('express-validator');
 
-//api/auth/register
+//  /api/auth/register
 router.post('/register',
     [check('email', 'Email invalid').isEmail(),
     check('password', 'Min password length 6 symbols').isLength({ min: 6 })],
     async (req, res) => {
         try {
+
             const errors = validationResult(req);
 
             if (!errors.isEmpty()) {
@@ -36,7 +37,7 @@ router.post('/register',
             res.status(500).json({ message: 'Что-то пошло не так, попробуйте снова' });
         }
     });
-//api/auth/login
+//  /api/auth/login
 router.post('/login',
     [
         check('email', 'Enter correct email').normalizeEmail().isEmail(),
