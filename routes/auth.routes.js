@@ -39,10 +39,8 @@ router.post('/register',
     });
 //  /api/auth/login
 router.post('/login',
-    [
-        check('email', 'Enter correct email').normalizeEmail().isEmail(),
-        check('passowrd', 'Enter password').exists()
-    ],
+    [check('email', 'Enter correct email').normalizeEmail().isEmail(),
+    check('password', 'Enter password').exists()],
     async (req, res) => {
         try {
             const errors = validationResult(req);
