@@ -19,6 +19,7 @@ export const AuthPage = () => {
         clearError();
     }, [error, message, clearError]);
 
+
     const changeHandler = (event) => {
         setForm({ ...form, [event.target.name]: event.target.value });
     };
