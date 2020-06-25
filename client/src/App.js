@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { userRoutes } from './routes';
 import { useAuth } from './hooks/auth.hook';
 import { AuthContext } from './context/AuthContext';
+import { Navbar } from './components/Navbar';
 
 import 'materialize-css';
 
@@ -11,11 +12,12 @@ function App() {
   const isAuthenteficated = !!token;
   const routes = userRoutes(isAuthenteficated);
   return (
-    <AuthContext.Provider value={{token, login, logout, userId, isAuthenteficated}}>
-    <Router>
-      <div className='container'>
-        {routes}
-      </div>
+    <AuthContext.Provider value={{ token, login, logout, userId, isAuthenteficated }}>
+      <Router>
+        {isAuthenteficated && <Navbar />}
+        <div className='container'>
+          {routes}
+        </div>
       </Router>
     </AuthContext.Provider>
   );
